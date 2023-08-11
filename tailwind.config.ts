@@ -8,7 +8,17 @@ const config: Config = {
   ],
   theme: {
     extend: {
-     
+      container: {
+        padding: {
+          DEFAULT: "15px",
+          md: "30px"
+        }
+      },
+      fontFamily: {
+        "bricolage": ['Bricolage Grotesque', "sans-serif"],
+        "sigmar": ["var(--font-sigmar)", "sans-serif"],
+        "comic": ["var(--font-comic)", "sans-serif"],
+      }
     },
   },
   plugins: [],
