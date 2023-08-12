@@ -20,6 +20,7 @@ export default function CustomSettings() {
         e.preventDefault()
         console.log(customSetting)
         changeSettings(customSetting)
+        changeStart(true)
     }
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +46,7 @@ export default function CustomSettings() {
                     <input type="number" id="bomb" name="bomb" defaultValue={customSetting.bomb} className="field w-10 h-10 text-center" onChange={handleChange} />
                 </div>
 
-                <button type='submit' className="text-black mt-6 bg-yellow-400 w-full py-3 rounded-3xl font-bricolage font-bold">Save</button>
+                <button type='submit' className="text-black mt-6 bg-yellow-400 w-full py-3 rounded-3xl font-bricolage font-bold">Start</button>
             </form>
         </div>
     )

@@ -43,7 +43,7 @@ export default function LevelSettings() {
                         </div>
                     </div>
 
-                    <button type='submit' className="text-black mt-6 bg-yellow-400 w-full py-3 rounded-3xl font-bricolage font-bold">Save</button>
+                    <button type='submit' className="text-black mt-6 bg-yellow-400 w-full py-3 rounded-3xl font-bricolage font-bold">Start</button>
 
                 </form>
             </div>

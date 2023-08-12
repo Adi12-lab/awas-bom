@@ -28,4 +28,14 @@ const useSettingsStore = create<SettingsState>((set) => ({
   changeSettings: (dataSettings) => set((state) => ({settings: dataSettings}))
 }))
 
-export { useStartStore, useSettingsStore }
+interface IsWin {
+  isWin: boolean,
+  changeIsWin: (isWin: boolean) => void 
+}
+const useIsWin = create<IsWin>((set) => ({
+  isWin: false,
+  changeIsWin: (iswin) => set((state) => ({isWin: iswin}))
+}))
+
+
+export { useStartStore, useSettingsStore, useIsWin }
