@@ -2,8 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,500;10..48,600;10..48,700;10..48,800&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,500;10..48,600;10..48,700;10..48,800&display=swap");
 
 .button-77 {
   align-items: center;
@@ -18,7 +17,7 @@
   display: inline-block;
   flex-direction: row;
   flex-shrink: 0;
-  font-family: Eina01,sans-serif;
+  font-family: Eina01, sans-serif;
   font-size: 16px;
   font-weight: 800;
   justify-content: center;
@@ -54,7 +53,7 @@
 }
 
 .button-77:before {
-  background-color: rgba(249, 58, 19, .32);
+  background-color: rgba(249, 58, 19, 0.32);
   content: "";
   display: block;
   height: 100%;
@@ -94,7 +93,12 @@
 }
 
 .button-77:active:not(:disabled):after {
-  background-image: linear-gradient(0deg, rgba(0, 0, 0, .2), rgba(0, 0, 0, .2)), linear-gradient(92.83deg, #ff7426 0, #f93a13 100%);
+  background-image: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0.2)
+    ),
+    linear-gradient(92.83deg, #ff7426 0, #f93a13 100%);
   bottom: 4px;
   left: 4px;
   right: 4px;
@@ -103,22 +107,22 @@
 
 .button-77:disabled {
   cursor: default;
-  opacity: .24;
+  opacity: 0.24;
 }
 
 /* CSS */
 
-
 .radio-btn {
-  @apply float-left me-5 w-[100px] h-10 relative ;
+  @apply float-left me-5 w-[100px] h-10 relative;
 }
 
-.radio-btn label, .radio-btn input {
+.radio-btn label,
+.radio-btn input {
   @apply block absolute top-0 left-0 right-0 bottom-0;
 }
 
 .radio-btn input[type="radio"] {
- @apply z-[100] opacity-0 cursor-pointer;
+  @apply z-[100] opacity-0 cursor-pointer;
 }
 
 .radio-btn:nth-child(1) input[type="radio"]:checked + label {
@@ -130,8 +134,6 @@
 .radio-btn:nth-child(3) input[type="radio"]:checked + label {
   @apply bg-red-600 rounded-lg;
 }
-
-
 
 .radio-btn label {
   @apply z-[90] leading-[40px] text-center;
@@ -164,11 +166,61 @@
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    /* display: none; <- Crashes Chrome on hover */
-    -webkit-appearance: none;
-    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
-input[type=number] {
-    -moz-appearance:textfield; /* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+.flipper {
+  position: relative;
+  -webkit-perspective: 1000px;
+  -ms-perspective: 1000px;
+  perspective: 1000px;
+}
+
+.flipper-card {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  transition: -webkit-transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    -webkit-transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.flipper-card.flipped {
+  transform: rotateY(180deg);
+}
+
+.flipper-front,
+.flipper-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  background: #c1c3c5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flipper-back {
+  background: #fff;
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+
+.flipper-card.flipper-is-flipped {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
 }

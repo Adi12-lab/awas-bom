@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${comic.variable} ${sigmar.variable}`}>{children}</body>
+      <body className={`${comic.variable} ${sigmar.variable} bg-[url('/image/neon-bg.jpg')] h-screen bg-cover bg-center`}>{children}</body>
     </html>
   )
 }

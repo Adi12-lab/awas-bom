@@ -1,13 +1,13 @@
 import { generateSettings } from '@/constant/settings'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-interface MenuState {
-    menu: string,
-    changeMenu: (dataMenu: string) => void
+interface StartState {
+    start: boolean,
+    changeStart: (isStart: boolean) => void
 }
-const useMenuStore = create<MenuState>((set) => ({
-  menu: "menu",
-  changeMenu: (dataMenu) => set((state) => ({menu: dataMenu}))
+const useStartStore = create<StartState>((set) => ({
+  start: false,
+  changeStart: (isStart) => set((state) => ({start: isStart}))
 }))
 
 type Settings = {
@@ -28,4 +28,4 @@ const useSettingsStore = create<SettingsState>((set) => ({
   changeSettings: (dataSettings) => set((state) => ({settings: dataSettings}))
 }))
 
-export { useMenuStore, useSettingsStore }
+export { useStartStore, useSettingsStore }

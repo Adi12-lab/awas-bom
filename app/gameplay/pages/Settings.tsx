@@ -1,11 +1,11 @@
 "use client"
-import CustomSettings from "../partials/CustomSettings";
-import LevelSettings from "../partials/LevelSettings";
-import { useMenuStore, useSettingsStore } from "@/hooks/menuStore";
+import CustomSettings from "../components/CustomSettings";
+import LevelSettings from "../components/LevelSettings";
+import { useStartStore, useSettingsStore } from "@/hooks/menuStore";
 
 export default function Settings() {
+    const {start} = useStartStore()
 
-    const { menu } = useMenuStore()
     const { settings } = useSettingsStore()
 
     function checkTypeSettings(settingsType: string) {
@@ -22,7 +22,7 @@ export default function Settings() {
 
     return (
         <div className="container max-w-full">
-            <div className={`${menu === "settings" ? "" : "hidden"} w-full flex flex-col justify-center items-center h-screen`}>
+            <div className={`${start ? "hidden" : ""} w-full flex flex-col justify-center items-center h-screen`}>
                 <h3 className='text-4xl font-sigmar text-orange-600'>
                     Settings
                 </h3>

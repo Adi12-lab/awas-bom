@@ -1,6 +1,6 @@
 "use client"
 import { useState, FormEvent, ChangeEvent } from "react"
-import { useMenuStore, useSettingsStore } from "@/hooks/menuStore";
+import { useStartStore, useSettingsStore } from "@/hooks/menuStore";
 
 type setting = {
     type: string,
@@ -13,7 +13,7 @@ export default function CustomSettings() {
         block: 0,
         bomb: 0
     })
-    const { changeMenu } = useMenuStore()
+    const { changeStart } = useStartStore()
     const { changeSettings } = useSettingsStore()
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
