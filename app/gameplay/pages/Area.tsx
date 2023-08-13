@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from "react"
-import { generateUniqueRandomNumbers, generateArrayNumber } from "@/helpers";
+import { generateUniqueRandomNumbers, generateArrayNumber, countBoolean } from "@/helpers";
 import { useStartStore, useSettingsStore } from "@/hooks/menuStore";
 import ModalResult from "@/components/modal-result";
 
@@ -8,13 +8,16 @@ import Question from "@/public/image/question.png"
 import Image from "next/image";
 import Bomb from "@/public/image/bomb.png"
 import Checklist from "@/public/image/icons8-check-96.png"
+import Timer from "@/components/timer";
 
 export default function Area() {
-    const [isWin, setIsWin] = useState(false)
     const { settings } = useSettingsStore()
     const { start, changeStart } = useStartStore() //Bermain atau tidak
+
+    const [isWin, setIsWin] = useState(false)
     const [openModalResult, setOpenModalResult] = useState(false) //dinyalakan atau tidak
     const [isFinish, setIsFinish] = useState(false)
+    const [counter, setCounter] = useState(0)
 
     const [blocks, setblocks] = useState<number[]>(generateArrayNumber(9))
     const [guesses, setGuesses] = useState(Array(blocks.length).fill(false));
@@ -29,7 +32,7 @@ export default function Area() {
 
 
         newFlipped[index] = true;
-        if(result === undefined) {
+        if (result === undefined) {
             newGuesses[index] = true; //tebakan benar
         } else {// tebakan salah
             newGuesses[index] = false;
@@ -40,32 +43,38 @@ export default function Area() {
 
         setGuesses(newGuesses);
         setFlipped(newFlipped)
+        setCounter(counter + 1)
     }
 
     useEffect(() => {
         const bombs = generateUniqueRandomNumbers(settings.bomb, 1, blocks.length);
         setBombList(bombs);
         setblocks(generateArrayNumber(settings.block))
+    }, [settings, blocks.length])
 
-        if (isWin) {
-            setIsWin(false)
-            changeStart(false)
+
+
+    useEffect(() => {
+        if (countBoolean(guesses, true) === (blocks.length - bombList.length)) {//mengecek apakah bom sudah terpilih atau tidak
+            setIsWin(true)
+            setIsFinish(true)
             setOpenModalResult(true)
         }
-    }, [isWin, changeStart, settings, blocks.length])
+
+    }, [guesses, blocks, bombList])
 
     return (
         <>
-            <section className={`${start ? "" : "hidden"} h-screen flex items-center justify-center`}>
+            <section className={`${start ? "" : "hidden"} flex h-screen flex-col items-center justify-center md:flex-row text-white`}>
 
-                <div className="w-[600px] h-[600px] grid grid-cols-4 gap-8">
+                <div className="w-[400px] h-[400px] md:w-[600px] md:h-[600px]  grid grid-cols-3 gap-8">
                     {
                         blocks.map((item, index) => {
                             return (
-                                <button type="button" className={`flipper`} key={item} disabled={isFinish} onClick={() => checkInput(item, index)}>
+                                <button type="button" className={`flipper `} key={item} disabled={isFinish} onClick={() => checkInput(item, index)}>
                                     <div className={`flipper-card ${flipped[index] ? "flipped" : ''}`}>
                                         <div className="flipper-front">
-                                            <Image src={Question} alt="question" />
+                                            <Image src={Question} alt="question" className="w-[70px] md:w-fit"/>
                                         </div>
                                         <div className="flipper-back">
                                             {guesses[index] ? (
@@ -80,8 +89,13 @@ export default function Area() {
                         })
                     }
                 </div>
+                <div className="order-first md:order-last">
+                    <Timer />
+
+                </div>
             </section>
-                <ModalResult isWin={isWin} active={openModalResult} />
+
+            <ModalResult isWin={isWin} active={openModalResult} />
         </>
     )
 }

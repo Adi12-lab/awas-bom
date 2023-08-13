@@ -5,13 +5,16 @@ import { useStartStore, useSettingsStore } from "@/hooks/menuStore";
 type setting = {
     type: string,
     block: number,
-    bomb: number
+    bomb: number,
+    // minutes: number,
+    // seconds: number,
 }
 export default function CustomSettings() {
     const [customSetting, setCustomSetting] = useState<setting>({
         type: "Custom",
         block: 0,
-        bomb: 0
+        bomb: 0,
+
     })
     const { changeStart } = useStartStore()
     const { changeSettings } = useSettingsStore()
@@ -40,6 +43,10 @@ export default function CustomSettings() {
                 <div className='mt-2 flex justify-between'>
                     <label htmlFor="block" className="text-white">Banyak blok</label>
                     <input type="number" id="block" name="block" defaultValue={customSetting.block} className="field w-10 h-10 text-center" onChange={handleChange} />
+                </div>
+                <div className='mt-2 flex justify-between'>
+                    <label htmlFor="bomb" className="text-white">Banyak bomb</label>
+                    <input type="number" id="bomb" name="bomb" defaultValue={customSetting.bomb} className="field w-10 h-10 text-center" onChange={handleChange} />
                 </div>
                 <div className='mt-2 flex justify-between'>
                     <label htmlFor="bomb" className="text-white">Banyak bomb</label>

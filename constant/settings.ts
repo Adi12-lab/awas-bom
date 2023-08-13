@@ -5,24 +5,32 @@ function generateSettings(difficult: string) {
                 type: "Mudah",
                 block: 12,
                 bomb: 1,
+                minutes: 3,
+                seconds: 30
             }
         case "medium":
             return {
                 type: "Awas",
                 block: 12,
-                bomb: 3
+                bomb: 3,
+                minutes: 3,
+                seconds: 0
             }
         case "hard":
             return {
                 type: "Ranjau",
                 block: 12,
-                bomb: 5
+                bomb: 5,
+                minutes: 2,
+                seconds: 30
             }
         default:
             return {
                 type: "Mudah",
                 block: 12,
                 bomb: 1,
+                minutes: 3,
+                seconds: 30
             }
     }
 }

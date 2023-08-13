@@ -14,6 +14,8 @@ type Settings = {
   type: string,
   block: number,
   bomb: number,
+  // minutes: number,
+  // seconds: number,
 
 }
 
