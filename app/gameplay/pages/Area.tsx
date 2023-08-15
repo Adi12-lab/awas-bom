@@ -1,23 +1,19 @@
 "use client"
 import { useState, useEffect } from "react"
 import { generateUniqueRandomNumbers, generateArrayNumber, countBoolean } from "@/helpers";
-import { useStartStore, useSettingsStore } from "@/hooks/menuStore";
-import ModalResult from "@/components/modal-result";
+import { useStartStore, useSettingsStore, useResults, useShowBombs } from "@/hooks/menuStore";
 
 import Question from "@/public/image/question.png"
 import Image from "next/image";
 import Bomb from "@/public/image/bomb.png"
 import Checklist from "@/public/image/icons8-check-96.png"
-import Timer from "@/components/timer";
 
 export default function Area() {
     const { settings } = useSettingsStore()
-    const { start, changeStart } = useStartStore() //Bermain atau tidak
+    const { start } = useStartStore() //Bermain atau tidak
+    const { results, changeResults } = useResults()
+    const { isShow } = useShowBombs()
 
-    const [isWin, setIsWin] = useState(false)
-    const [openModalResult, setOpenModalResult] = useState(false) //dinyalakan atau tidak
-    const [isFinish, setIsFinish] = useState(false)
-    const [counter, setCounter] = useState(0)
 
     const [blocks, setblocks] = useState<number[]>(generateArrayNumber(9))
     const [guesses, setGuesses] = useState(Array(blocks.length).fill(false));
@@ -33,17 +29,19 @@ export default function Area() {
 
         newFlipped[index] = true;
         if (result === undefined) {
-            newGuesses[index] = true; //tebakan benar
+            newGuesses[index] = true; //tebakan benar tapi belum tentu menang
         } else {// tebakan salah
             newGuesses[index] = false;
-            setOpenModalResult(true);
-            setIsFinish(true)
+
+            changeResults({
+                isFinish: true,
+                result: "lose"
+            })
         }
 
 
         setGuesses(newGuesses);
         setFlipped(newFlipped)
-        setCounter(counter + 1)
     }
 
     useEffect(() => {
@@ -56,28 +54,30 @@ export default function Area() {
 
     useEffect(() => {
         if (countBoolean(guesses, true) === (blocks.length - bombList.length)) {//mengecek apakah bom sudah terpilih atau tidak
-            setIsWin(true)
-            setIsFinish(true)
-            setOpenModalResult(true)
+
+            changeResults({
+                isFinish: true,
+                result: "win"
+            })
         }
 
-    }, [guesses, blocks, bombList])
+    }, [guesses, blocks, bombList, changeResults])
 
     return (
         <>
-            <section className={`${start ? "" : "hidden"} flex h-screen flex-col items-center justify-center md:flex-row text-white`}>
+            <section className={`${start === "start" ? "" : "hidden"} text-white`}>
 
                 <div className="w-[400px] h-[400px] md:w-[600px] md:h-[600px]  grid grid-cols-3 gap-8">
                     {
                         blocks.map((item, index) => {
                             return (
-                                <button type="button" className={`flipper `} key={item} disabled={isFinish} onClick={() => checkInput(item, index)}>
-                                    <div className={`flipper-card ${flipped[index] ? "flipped" : ''}`}>
+                                <button type="button" className={`flipper `} key={item} disabled={results.isFinish} onClick={() => checkInput(item, index)}>
+                                    <div className={`flipper-card ${flipped[index] || isShow ? "flipped" : ''}`}>
                                         <div className="flipper-front">
-                                            <Image src={Question} alt="question" className="w-[70px] md:w-fit"/>
+                                            <Image src={Question} alt="question" className="w-[70px] md:w-fit" />
                                         </div>
                                         <div className="flipper-back">
-                                            {guesses[index] ? (
+                                            {guesses[index] || (isShow && bombList.find((bomb) => (bomb == item)) === undefined) ? (
                                                 <Image src={Checklist} alt="checklist" />
                                             ) : (
                                                 <Image src={Bomb} alt="bomb" />
@@ -89,13 +89,8 @@ export default function Area() {
                         })
                     }
                 </div>
-                <div className="order-first md:order-last">
-                    <Timer />
-
-                </div>
             </section>
 
-            <ModalResult isWin={isWin} active={openModalResult} />
         </>
     )
 }

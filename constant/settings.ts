@@ -5,8 +5,8 @@ function generateSettings(difficult: string) {
                 type: "Mudah",
                 block: 12,
                 bomb: 1,
-                minutes: 3,
-                seconds: 30
+                minutes: 0,
+                seconds: 5
             }
         case "medium":
             return {
@@ -29,7 +29,7 @@ function generateSettings(difficult: string) {
                 type: "Mudah",
                 block: 12,
                 bomb: 1,
-                minutes: 3,
+                minutes: 2,
                 seconds: 30
             }
     }

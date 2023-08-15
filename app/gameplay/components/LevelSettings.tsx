@@ -1,25 +1,18 @@
 "use client"
-import { useState, FormEvent } from "react"
+import { FormEvent } from "react"
 import { useStartStore, useSettingsStore } from "@/hooks/menuStore";
 import { generateSettings } from "@/constant/settings";
 
 
 export default function LevelSettings() {
-    const initialSettings = generateSettings("easy");
-    const [setting, setSetting] = useState({
-        type: initialSettings.type,
-        block: initialSettings.block,
-        bomb: initialSettings.bomb,
-    });
     
-    const { changeSettings } = useSettingsStore()
+    const {settings, changeSettings } = useSettingsStore()
     const {changeStart} = useStartStore()
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log(setting)
-        changeSettings(setting)
-        changeStart(true)
+        console.log(settings)
+        changeStart("pre-start")
     }
     
     return (
@@ -30,15 +23,15 @@ export default function LevelSettings() {
                 <form onSubmit={handleSubmit} className="mt-4">
                     <div className="font-comic">
                         <div className="radio-btn">
-                            <input type="radio" id="settingEasy" checked={setting.type === "Mudah"} onChange={() => setSetting(generateSettings("easy"))} />
+                            <input type="radio" id="settingEasy" checked={settings.type === "Mudah"} onChange={() => changeSettings(generateSettings("easy"))} />
                             <label htmlFor="settingEasy">Mudah</label>
                         </div>
                         <div className="radio-btn">
-                            <input type="radio" id="settingMedium" checked={setting.type === "Awas"} onChange={() => setSetting(generateSettings("medium"))} />
+                            <input type="radio" id="settingMedium" checked={settings.type === "Awas"} onChange={() => changeSettings(generateSettings("medium"))} />
                             <label htmlFor="settingMedium">Awas</label>
                         </div>
                         <div className="radio-btn">
-                            <input type="radio" id="settingHard" checked={setting.type === "Ranjau"} onChange={() => setSetting(generateSettings("hard"))} />
+                            <input type="radio" id="settingHard" checked={settings.type === "Ranjau"} onChange={() => changeSettings(generateSettings("hard"))} />
                             <label htmlFor="settingHard">Ranjau</label>
                         </div>
                     </div>

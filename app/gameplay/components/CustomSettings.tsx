@@ -6,14 +6,16 @@ type setting = {
     type: string,
     block: number,
     bomb: number,
-    // minutes: number,
-    // seconds: number,
+    minutes: number,
+    seconds: number,
 }
 export default function CustomSettings() {
     const [customSetting, setCustomSetting] = useState<setting>({
         type: "Custom",
         block: 0,
         bomb: 0,
+        minutes: 0,
+        seconds: 0,
 
     })
     const { changeStart } = useStartStore()
@@ -23,7 +25,7 @@ export default function CustomSettings() {
         e.preventDefault()
         console.log(customSetting)
         changeSettings(customSetting)
-        changeStart(true)
+        changeStart("pre-start")
     }
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -49,8 +51,12 @@ export default function CustomSettings() {
                     <input type="number" id="bomb" name="bomb" defaultValue={customSetting.bomb} className="field w-10 h-10 text-center" onChange={handleChange} />
                 </div>
                 <div className='mt-2 flex justify-between'>
-                    <label htmlFor="bomb" className="text-white">Banyak bomb</label>
-                    <input type="number" id="bomb" name="bomb" defaultValue={customSetting.bomb} className="field w-10 h-10 text-center" onChange={handleChange} />
+                    <label className="text-white">Menit : Detik</label>
+                    <div>
+                        <input type="number" name="minutes" defaultValue={customSetting.minutes} className="field w-10 h-10 text-center" onChange={handleChange} />
+                        <span className="inline-block mx-3 text-white text-3xl font-bricolage">:</span>
+                        <input type="number" name="seconds" defaultValue={customSetting.seconds} className="field w-10 h-10 text-center" onChange={handleChange} />
+                    </div>
                 </div>
 
                 <button type='submit' className="text-black mt-6 bg-yellow-400 w-full py-3 rounded-3xl font-bricolage font-bold">Start</button>

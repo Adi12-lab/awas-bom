@@ -1,19 +1,17 @@
 "use client"
-import React, { useState, useEffect, useRef, MouseEventHandler } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
+import { useResults } from '@/hooks/menuStore';
 
-type ModalResultProps = {
-    isWin: boolean;
-    active: boolean;
-};
 
-export default function ModalResult({ isWin, active }: ModalResultProps) {
-    const [isActive, setIsActive] = useState(active);
-
+export default function ModalResult() {
+    const [isActive, setIsActive] = useState(false);
     const modalRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        setIsActive(active)
-    }, [active])
+    const {results} = useResults()
 
+    useEffect(() => {
+        console.log(results)
+        if(results.isFinish) setIsActive(true)
+    },[results])
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -36,10 +34,10 @@ export default function ModalResult({ isWin, active }: ModalResultProps) {
                 } h-[200px] w-full bg-glass absolute top-1/2 left-0 -translate-y-1/2 z-[800]`}
         >
             <h2
-                className={`custom-shadow text-center leading-[200px] font-sigmar text-6xl tracking-[10px] ${isWin ? 'text-green-400' : 'text-red-400'
+                className={`custom-shadow text-center leading-[200px] font-sigmar text-6xl tracking-[10px] ${results.result === "win" ? 'text-green-400' : 'text-red-400'
                     }`}
             >
-                {isWin ? 'Menang' : 'Kalah'}
+                {results.result === "win" ? 'Menang' : 'Kalah'}
             </h2>
         </div>
     );
