@@ -43,8 +43,8 @@ export default function Counter() {
                 <span ref={letter1} className="inline-block scale-[.2] opacity-0 absolute left-0 top-0">3</span>
                 <span ref={letter2} className="inline-block scale-[.2] opacity-0 absolute left-0 top-0">2</span>
                 <span ref={letter3} className="inline-block scale-[.2] opacity-0 absolute left-0 top-0">1</span>
-                <span ref={letter4} className="inline-block w-[350px] opacity-0 absolute left-0 top-0 -translate-x-1/2">
-                    Awas Bom
+                <span ref={letter4} className="inline-block w-[500px] opacity-0 absolute left-0 top-0 -translate-x-1/2">
+                    Bada-Boom
                 </span>
             </h1>
 

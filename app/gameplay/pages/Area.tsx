@@ -5,7 +5,10 @@ import {
     generateArrayNumber,
     countBoolean,
     subtractArrays,
-    getRandomUniqueNumbers
+    getRandomUniqueNumbers,
+    combineArrays,
+    removeObjectsByNumber,
+    generateRandomNumber
 } from "@/helpers";
 import {
     useStartStore,
@@ -20,9 +23,10 @@ import Image from "next/image";
 import Bomb from "@/public/image/bomb.png"
 import Checklist from "@/public/image/icons8-check-96.png"
 
-type Block = {
+
+type numberBomb = {
     num: number,
-    guessed: false, 
+    guessed: boolean
 }
 export default function Area() {
     const { settings } = useSettingsStore()
@@ -39,11 +43,11 @@ export default function Area() {
     const [bombList, setBombList] = useState<number[]>([]);
     const [choicedBlocks, setChoicedBlocks] = useState<number[]>([]);
     const [bonusBlocks, setBonusBlocks] = useState<number[]>([]);
+    const [bonusKeyBlock, setBonusKeyBlock] = useState<numberBomb>({ num: -1, guessed: false });
 
     const [activeBlock, setActiveBlock] = useState<number>(0)
 
     const checkInput = (num: number, index: number) => {
-        console.log(bombList)
         setActiveBlock(num) //aktifkan block sekarang
         const result = bombList.find((bomb) => (bomb == num))
         const newGuesses = [...guesses];
@@ -68,7 +72,7 @@ export default function Area() {
     }
 
     useEffect(() => {
-        if (choicedBlocks.includes(activeBlock)) {
+        if (choicedBlocks.includes(activeBlock) && askHelp.ask) {
             changeAskHelp({
                 ask: true,
                 active: true,
@@ -76,14 +80,14 @@ export default function Area() {
             })
 
         }
-    }, [activeBlock, choicedBlocks, changeAskHelp])
+    }, [activeBlock, choicedBlocks])
 
 
     useEffect(() => {
         const bombs = generateUniqueRandomNumbers(settings.bomb, 1, blocks.length);
         const saveBlocks = subtractArrays(blocks, bombs)
 
-        setChoicedBlocks(getRandomUniqueNumbers(saveBlocks, settings.help))
+        setChoicedBlocks(getRandomUniqueNumbers(saveBlocks, settings.help as number))
         setBombList(bombs);
         setblocks(generateArrayNumber(settings.block))
 
@@ -100,36 +104,36 @@ export default function Area() {
             })
         }
 
-    }, [guesses,  changeResults])
+    }, [guesses, changeResults])
 
     useEffect(() => {
-        if(askHelp.isCorrect) {
-            console.log(bonusBlocks)
+        if (askHelp.isCorrect) {
         }
     }, [askHelp, bonusBlocks])
 
-    useEffect(() => {
-        const saveBlocks = subtractArrays(blocks, bombList)
-        const bonus = saveBlocks.filter(bon => bon !== activeBlock)
-        setBonusBlocks(bonus)
-        //cari semua block yang aman
+    // useEffect(() => {
+    //     //pasangkan blocks dengan guessed
+    //     if (blocks.length !== 0) {
+    //         const transform1 = combineArrays(blocks, guesses)
+    //         const paramRemove = [...bombList, activeBlock]
+    //         const transform2 = removeObjectsByNumber(transform1, paramRemove)
+    //         const transform3 = transform2.filter(item => item.guessed !== true)
 
-        //ambil semua index dari block tersebut
+    //         const indexRandom = generateRandomNumber(0, transform3.length)
+    //         setBonusKeyBlock(transform3[indexRandom])
+    //     }
 
-        //generate daftar index yang aman dan belum dijawab
-        
-    }, [bombList])
+    // }, [bombList, guesses, activeBlock])
 
     return (
         <>
 
             <section className={`${start === "start" ? "" : "hidden"} text-white`}>
-                {askHelp.isCorrect ? "Jawaban benar" : "salah"}
                 <div className="w-[400px] h-[400px] md:w-[600px] md:h-[600px]  grid grid-cols-3 gap-8">
                     {
                         blocks.map((item, index) => {
                             return (
-                                <button type="button" className={`flipper `} key={item} disabled={results.isFinish} onClick={() => checkInput(item, index)}>
+                                <button type="button" className={`flipper ${bonusKeyBlock?.num === index ? "bg-green-700" : ""} `} key={item} disabled={results.isFinish} onClick={() => checkInput(item, index)}>
                                     <div className={`flipper-card ${flipped[index] || isShow ? "flipped" : ''}`}>
                                         <div className="flipper-front">
                                             <Image src={Question} alt="question" className="w-[70px] md:w-fit" />

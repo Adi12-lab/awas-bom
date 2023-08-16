@@ -25,10 +25,10 @@ export default function ModalQuestion() {
 
 
     useEffect(() => {
-        const indexRandom = generateRandomNumber(0, statements.length -1)
+        const indexRandom = generateRandomNumber(0, statements.length - 1)
         setStatement(statements[indexRandom])
 
-        console.log(askHelp)
+
         if ((askHelp.ask && askHelp.active) && progress > 0) {
             interval.current = setInterval(() => {
                 setProgress((prevProgress) => prevProgress - 100 / countdownDuration);
@@ -40,7 +40,6 @@ export default function ModalQuestion() {
             setProgress(100)
         }
 
-        console.log("bawah", askHelp)
 
     }, [askHelp, results]);
 

@@ -77,3 +77,22 @@ export function getIndexArray(arrays: number[]) {
 
   return allIndex
 }
+
+export function combineArrays(numbersArray: number[], guessedArray: boolean[]) {
+  if (numbersArray.length !== guessedArray.length) {
+    throw new Error("Array lengths do not match");
+  }
+
+  return numbersArray.map((num, index) => ({
+    num,
+    guessed: guessedArray[index]
+  }));
+}
+type numberBomb = {
+  num: number,
+  guessed: boolean
+}
+export function removeObjectsByNumber(originalArray: numberBomb[], numbersToRemove: number[]) {
+  const newArray = originalArray.filter(obj => !numbersToRemove.includes(obj.num));
+  return newArray;
+}

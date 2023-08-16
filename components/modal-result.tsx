@@ -9,7 +9,6 @@ export default function ModalResult() {
     const {results} = useResults()
 
     useEffect(() => {
-        console.log(results)
         if(results.isFinish) setIsActive(true)
     },[results])
 

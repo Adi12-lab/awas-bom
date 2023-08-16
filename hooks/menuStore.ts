@@ -20,7 +20,7 @@ type Settings = {
   bomb: number,
   minutes: number,
   seconds: number,
-  help: number
+  help?: number
 
 }
 

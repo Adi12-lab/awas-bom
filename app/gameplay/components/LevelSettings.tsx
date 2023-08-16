@@ -10,7 +10,7 @@ export default function LevelSettings() {
     const { changeStart } = useStartStore()
     const { changeAskHelp } = useAskHelp()
 
-
+    
     return (
         <>
 
@@ -32,25 +32,29 @@ export default function LevelSettings() {
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-center gap-x-5 pt-4">
-                        <span >Bantuan</span>
+                        <span >Bantuan (belum jadi)</span>
 
                         <div className="checkbox-wrapper-22 mt-2">
                             <label className="switch" htmlFor="checkbox">
-                                <input type="checkbox" id="checkbox"  onChange={() =>
+                                <input type="checkbox" id="checkbox" onChange={(e) =>
+                                    e.target.checked ? 
                                     changeAskHelp({
-                                        active: false,
                                         ask: true,
+                                        active: false,
+                                        isCorrect: false
+                                    }) : changeAskHelp({
+                                        ask: false,
+                                        active: false,
                                         isCorrect: false
                                     })
-
                                 } />
                                 <div className="slider round"></div>
                             </label>
                         </div>
                     </div>
 
-                    <button type='button' className="text-black mt-6 bg-yellow-400 w-full py-3 rounded-3xl font-bricolage font-bold" 
-                    onClick={() => changeStart("start")}>
+                    <button type='button' className="text-black mt-6 bg-yellow-400 w-full py-3 rounded-3xl font-bricolage font-bold"
+                        onClick={() => changeStart("pre-start")}>
                         Start
                     </button>
 
