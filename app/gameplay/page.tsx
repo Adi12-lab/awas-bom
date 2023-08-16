@@ -9,9 +9,9 @@ import ModalQuestion from "@/components/modal-question"
 export default function Home() {
   return (
     <>
-      <Settings />
       <main className="flex h-screen flex-col items-center justify-center md:flex-row text-white">
 
+        <Settings />
         <Area />
         <div className="order-first md:order-last flex flex-col items-center">
           <Timer />

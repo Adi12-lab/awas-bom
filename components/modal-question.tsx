@@ -50,15 +50,26 @@ export default function ModalQuestion() {
             duration: 0.5, // Durasi animasi
             ease: 'power1.out', // Efek easing
         });
+        if (progress === 0) {
+            changeAskHelp({
+                ask: true,
+                active: false,
+                isCorrect: false
+            })
+        }
     }, [progress])
+
     useEffect(() => {
         if (answer === statement.isTrue) {
+            console.log("benar")
             changeAskHelp({//nonaktifkan sementara
                 ask: true,
                 active: false,
                 isCorrect: true,
             })
-        } else if (progress === 0 || (answer !== statement.isTrue && answer !== null)) { //jawaban sudah ada tapi bernilai salah
+        } else if (answer !== statement.isTrue && answer !== null) { //jawaban sudah ada tapi bernilai salah
+            
+            console.log("salah")
             changeAskHelp({
                 ask: true,
                 active: false,

@@ -10,7 +10,7 @@ export default function Settings() {
 
     return (
         <div>
-            <div className={`${start !== "stop" ? "hidden" : ""} w-full flex flex-col justify-center items-center h-screen`}>
+            <div className={`${start !== "stop" ? "hidden" : ""} flex flex-col items-center`}>
                 <h3 className='text-4xl font-sigmar text-orange-600'>
                     Peraturan permainan
                 </h3>

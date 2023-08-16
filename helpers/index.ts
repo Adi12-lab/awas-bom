@@ -95,4 +95,14 @@ type numberBomb = {
 export function removeObjectsByNumber(originalArray: numberBomb[], numbersToRemove: number[]) {
   const newArray = originalArray.filter(obj => !numbersToRemove.includes(obj.num));
   return newArray;
+
+}
+
+export function checkIfElementsNotExist(a: number[], b: number[]) {
+  for (let i = 0; i < a.length; i++) {
+    if (!b.includes(a[i])) {
+      return true;
+    }
+  }
+  return false;
 }

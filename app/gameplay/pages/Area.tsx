@@ -1,5 +1,6 @@
 "use client"
 import { useState, useEffect } from "react"
+import { gsap } from "gsap";
 import {
     generateUniqueRandomNumbers,
     generateArrayNumber,
@@ -8,7 +9,8 @@ import {
     getRandomUniqueNumbers,
     combineArrays,
     removeObjectsByNumber,
-    generateRandomNumber
+    generateRandomNumber,
+    checkIfElementsNotExist
 } from "@/helpers";
 import {
     useStartStore,
@@ -17,6 +19,7 @@ import {
     useShowBombs,
     useAskHelp
 } from "@/hooks/menuStore";
+
 
 import Question from "@/public/image/question.png"
 import Image from "next/image";
@@ -42,13 +45,13 @@ export default function Area() {
     const [flipped, setFlipped] = useState(Array(blocks.length).fill(false));
     const [bombList, setBombList] = useState<number[]>([]);
     const [choicedBlocks, setChoicedBlocks] = useState<number[]>([]);
-    const [bonusBlocks, setBonusBlocks] = useState<number[]>([]);
     const [bonusKeyBlock, setBonusKeyBlock] = useState<numberBomb>({ num: -1, guessed: false });
 
-    const [activeBlock, setActiveBlock] = useState<number>(0)
+    const [activeBlock, setActiveBlock] = useState<number[]>([])
+    const [activeBonusKeyBlock, setActiveBonusKeyBlock] = useState(false)
 
-    const checkInput = (num: number, index: number) => {
-        setActiveBlock(num) //aktifkan block sekarang
+    const checkInput = (num: number, index: number) => {//mengecek input
+        setActiveBlock((prevState) => [...prevState, num]) //aktifkan block sekarang
         const result = bombList.find((bomb) => (bomb == num))
         const newGuesses = [...guesses];
         const newFlipped = [...flipped];
@@ -69,10 +72,18 @@ export default function Area() {
 
         setGuesses(newGuesses);
         setFlipped(newFlipped)
+        setActiveBonusKeyBlock(false)
+        if (askHelp.ask) {
+            changeAskHelp({
+                ask: true,
+                active: false,
+                isCorrect: false
+            })
+        }
     }
 
-    useEffect(() => {
-        if (choicedBlocks.includes(activeBlock) && askHelp.ask) {
+    useEffect(() => {//memilih block yang mengandung pertanyaan
+        if (checkIfElementsNotExist(choicedBlocks, activeBlock) && askHelp.ask) {
             changeAskHelp({
                 ask: true,
                 active: true,
@@ -83,7 +94,7 @@ export default function Area() {
     }, [activeBlock, choicedBlocks])
 
 
-    useEffect(() => {
+    useEffect(() => {//menginisialisasi
         const bombs = generateUniqueRandomNumbers(settings.bomb, 1, blocks.length);
         const saveBlocks = subtractArrays(blocks, bombs)
 
@@ -107,38 +118,43 @@ export default function Area() {
     }, [guesses, changeResults])
 
     useEffect(() => {
+        console.log("Choiced", choicedBlocks)
         if (askHelp.isCorrect) {
+            setActiveBonusKeyBlock(true)
         }
-    }, [askHelp, bonusBlocks])
+        console.log("bonus key", bonusKeyBlock)
+    }, [bonusKeyBlock])
 
-    // useEffect(() => {
-    //     //pasangkan blocks dengan guessed
-    //     if (blocks.length !== 0) {
-    //         const transform1 = combineArrays(blocks, guesses)
-    //         const paramRemove = [...bombList, activeBlock]
-    //         const transform2 = removeObjectsByNumber(transform1, paramRemove)
-    //         const transform3 = transform2.filter(item => item.guessed !== true)
+    useEffect(() => {
+        //pasangkan blocks dengan guessed
+        if (askHelp.ask) {
+            const transform1 = combineArrays(blocks, guesses)
+            // console.log(transform1)
+            const paramRemove = [...bombList, ...activeBlock]
+            const transform2 = removeObjectsByNumber(transform1, paramRemove)//hilang dari bomblist, dan active
+            const transform3 = removeObjectsByNumber(transform2, choicedBlocks)
+            const transform4 = transform3.filter(item => item.guessed !== true)
 
-    //         const indexRandom = generateRandomNumber(0, transform3.length)
-    //         setBonusKeyBlock(transform3[indexRandom])
-    //     }
+            const indexRandom = generateRandomNumber(0, transform4.length)
+            setBonusKeyBlock(transform4[indexRandom])
+        }
 
-    // }, [bombList, guesses, activeBlock])
+    }, [bombList, guesses, activeBlock, askHelp])
 
     return (
         <>
 
-            <section className={`${start === "start" ? "" : "hidden"} text-white`}>
+            <section className={`${start === "start" ? "" : "hidden"}`}>
                 <div className="w-[400px] h-[400px] md:w-[600px] md:h-[600px]  grid grid-cols-3 gap-8">
                     {
                         blocks.map((item, index) => {
                             return (
-                                <button type="button" className={`flipper ${bonusKeyBlock?.num === index ? "bg-green-700" : ""} `} key={item} disabled={results.isFinish} onClick={() => checkInput(item, index)}>
+                                <button type="button" className={`flipper `} key={item} disabled={results.isFinish} onClick={() => checkInput(item, index)}>
                                     <div className={`flipper-card ${flipped[index] || isShow ? "flipped" : ''}`}>
-                                        <div className="flipper-front">
+                                        <div className={`flipper-front ${activeBonusKeyBlock && bonusKeyBlock?.num === item ? "bg-green-600" : "bg-[#c1c3c5]"}`}>
                                             <Image src={Question} alt="question" className="w-[70px] md:w-fit" />
                                         </div>
-                                        <div className="flipper-back">
+                                        <div className="flipper-back bg-[#c1c3c5]">
                                             {guesses[index] || (isShow && bombList.find((bomb) => (bomb == item)) === undefined) ? (
                                                 <Image src={Checklist} alt="checklist" />
                                             ) : (
