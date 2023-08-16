@@ -25,6 +25,7 @@ export default function CustomSettings() {
         e.preventDefault()
         console.log(customSetting)
         changeSettings(customSetting)
+
         changeStart("pre-start")
     }
 

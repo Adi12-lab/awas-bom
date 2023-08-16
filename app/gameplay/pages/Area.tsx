@@ -95,7 +95,7 @@ export default function Area() {
 
 
     useEffect(() => {//menginisialisasi
-        const bombs = generateUniqueRandomNumbers(settings.bomb, 1, blocks.length);
+        const bombs = generateUniqueRandomNumbers(settings.bomb, 1, generateArrayNumber(settings.block).length);
         const saveBlocks = subtractArrays(blocks, bombs)
 
         setChoicedBlocks(getRandomUniqueNumbers(saveBlocks, settings.help as number))
@@ -126,6 +126,7 @@ export default function Area() {
     }, [bonusKeyBlock])
 
     useEffect(() => {
+        console.log(bombList)
         //pasangkan blocks dengan guessed
         if (askHelp.ask) {
             const transform1 = combineArrays(blocks, guesses)
