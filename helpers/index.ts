@@ -10,6 +10,9 @@ export function generateArrayNumber(maxValue: number) {
   return resultArray;
 }
 
+export function generateRandomNumber(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1 + min))
+}
 
 export function generateUniqueRandomNumbers(count: number, min: number, max: number) {
   if (max - min + 1 < count) {
@@ -38,4 +41,39 @@ export function countBoolean(arr: boolean[], condition: boolean) {
   }
 
   return booleanCount;
+}
+
+export function subtractArrays(arrayA: number[], arrayB: number[]) {
+  return arrayA.filter(item => !arrayB.includes(item));
+}
+
+export function getRandomUniqueNumbers(array: number[], count: number) {
+  if (count > array.length) {
+    console.log("Jumlah angka yang diminta lebih besar dari panjang array.");
+    return [];
+  }
+
+  const selectedIndexes: number[] = [];
+  const result = [];
+
+  while (selectedIndexes.length < count) {
+    const randomIndex = Math.floor(Math.random() * array.length);
+
+    if (!selectedIndexes.includes(randomIndex)) {
+      selectedIndexes.push(randomIndex);
+      result.push(array[randomIndex]);
+    }
+  }
+
+  return result;
+}
+
+
+export function getIndexArray(arrays: number[]) {
+  let allIndex: number[] = []
+  arrays.forEach((arr) => {
+    allIndex.push(arrays.indexOf(arr))
+  })
+
+  return allIndex
 }

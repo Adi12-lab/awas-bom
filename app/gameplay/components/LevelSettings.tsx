@@ -1,26 +1,22 @@
 "use client"
-import { FormEvent } from "react"
-import { useStartStore, useSettingsStore } from "@/hooks/menuStore";
+import { FormEvent, useState } from "react"
+import { useStartStore, useSettingsStore, useAskHelp } from "@/hooks/menuStore";
 import { generateSettings } from "@/constant/settings";
 
 
 export default function LevelSettings() {
-    
-    const {settings, changeSettings } = useSettingsStore()
-    const {changeStart} = useStartStore()
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        console.log(settings)
-        changeStart("pre-start")
-    }
-    
+    const { settings, changeSettings } = useSettingsStore()
+    const { changeStart } = useStartStore()
+    const { changeAskHelp } = useAskHelp()
+
+
     return (
         <>
-          
+
             <div className="mt-3 text-white">
                 <h4 className="mt-5 font-bold text-xl text-green-800">Level setting</h4>
-                <form onSubmit={handleSubmit} className="mt-4">
+                <div className="mt-4">
                     <div className="font-comic">
                         <div className="radio-btn">
                             <input type="radio" id="settingEasy" checked={settings.type === "Mudah"} onChange={() => changeSettings(generateSettings("easy"))} />
@@ -35,10 +31,30 @@ export default function LevelSettings() {
                             <label htmlFor="settingHard">Ranjau</label>
                         </div>
                     </div>
+                    <div className="w-full flex items-center justify-center gap-x-5 pt-4">
+                        <span >Bantuan</span>
 
-                    <button type='submit' className="text-black mt-6 bg-yellow-400 w-full py-3 rounded-3xl font-bricolage font-bold">Start</button>
+                        <div className="checkbox-wrapper-22 mt-2">
+                            <label className="switch" htmlFor="checkbox">
+                                <input type="checkbox" id="checkbox"  onChange={() =>
+                                    changeAskHelp({
+                                        active: false,
+                                        ask: true,
+                                        isCorrect: false
+                                    })
 
-                </form>
+                                } />
+                                <div className="slider round"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type='button' className="text-black mt-6 bg-yellow-400 w-full py-3 rounded-3xl font-bricolage font-bold" 
+                    onClick={() => changeStart("start")}>
+                        Start
+                    </button>
+
+                </div>
             </div>
 
         </>

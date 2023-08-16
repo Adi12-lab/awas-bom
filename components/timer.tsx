@@ -1,65 +1,76 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
 
-import { useStartStore, useSettingsStore, useResults } from "@/hooks/menuStore"
+import { useStartStore, useSettingsStore, useResults, useAskHelp } from "@/hooks/menuStore"
 import Tnt from "@/public/image/tnt2.png"
 import Image from "next/image"
 
 export default function Timer() {
     const { settings } = useSettingsStore()
+    const { askHelp } = useAskHelp()
 
     const [seconds, setSeconds] = useState(settings.seconds)
     const [minutes, setMinutes] = useState(settings.minutes)
+    const [isPaused, setIsPaused] = useState(false);
 
     let timer = useRef<ReturnType<typeof setInterval>>();
-    const { start } = useStartStore() //memasuki play atau tidak
-    const { results, changeResults} = useResults()
+    const { start } = useStartStore()
+    const { results, changeResults } = useResults()
 
     useEffect(() => {
-        if (start === "start") {
+        if (start === "start" && !isPaused) {
             timer.current = setInterval(() => {
-                setSeconds(seconds - 1)
-                if (seconds === 0) {
-                    if (minutes > 0) {
-                        setMinutes(minutes - 1)
+                setSeconds(prevSeconds => {
+                    if (prevSeconds === 0) {
+                        if (minutes > 0) {
+                            setMinutes(prevMinutes => prevMinutes - 1);
+                            return 59;
+                        } else {
+                            clearInterval(timer.current);
+                            changeResults({
+                                isFinish: true,
+                                result: "lose"
+                            });
+                            return 0;
+                        }
+                    } else {
+                        return prevSeconds - 1;
                     }
-                    setSeconds(59)
-                }
-            }, 1000)
+                });
+            }, 1000);
 
-            return () => clearInterval(timer.current)
+            return () => clearInterval(timer.current);
 
         } else {
-            clearInterval(timer.current)
-
+            clearInterval(timer.current);
         }
-    })
+    }, [start, isPaused, minutes, changeResults]);
 
     useEffect(() => {
-
-        if (results.isFinish) clearInterval(timer.current)
-    }, [results])
+        if (results.isFinish) clearInterval(timer.current);
+    }, [results]);
 
     useEffect(() => {
-        setMinutes(settings.minutes)
-        setSeconds(settings.seconds)
-    }, [settings])
+        setMinutes(settings.minutes);
+        setSeconds(settings.seconds);
+    }, [settings]);
 
-    const restart = () => {
-
-        setSeconds(0)
-        setMinutes(0)
-
-    }
-    useEffect(() => {//kondisi kalah kehabisan waktu
-        if ((minutes === 0 && seconds === 0)) {
-            clearInterval(timer.current)
+    useEffect(() => {
+        if (minutes === 0 && seconds === 0) {
+            clearInterval(timer.current);
             changeResults({
                 isFinish: true,
                 result: "lose"
-            })
+            });
         }
-    }, [minutes, seconds, timer, changeResults])
+    }, [minutes, seconds, changeResults]);
+
+    useEffect(() => {
+        setIsPaused(askHelp.active)
+    }, [askHelp.active])
+
+  
+
     return (
         <div className={`${start === "start" ? "" : "hidden"} flex items-center relative text-white`}>
             <h2 className="font-sigmar text-4xl absolute z-40 right-[37px] top-[84px]">{minutes < 10 ? "0" + minutes : minutes}:{seconds < 10 ? "0" + seconds : seconds}</h2>

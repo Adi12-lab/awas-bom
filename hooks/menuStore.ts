@@ -20,6 +20,7 @@ type Settings = {
   bomb: number,
   minutes: number,
   seconds: number,
+  help: number
 
 }
 
@@ -49,7 +50,7 @@ const useResults = create<Result>((set) => ({
     isFinish: false,
     result: "lose"
   },
-  changeResults: (results) => set((state) => ({ ...state.results, results }))
+  changeResults: (results) => set((state) => ({ results }))
 }))
 
 //----Show Bombs----
@@ -64,6 +65,45 @@ const useShowBombs = create<ShowBombsState>((set) => ({
   changeIsShow: (isShow) => set((state) => ({ isShow }))
 }))
 
+// -------Statement------
 
 
-export { useStartStore, useSettingsStore, useResults, useShowBombs }
+// interface StatementsState {
+//   statements: Statement[],
+//   changeStatements: (statements: Statement[]) => void
+// }
+
+// const useStatement = create<StatementsState>((set) => ({//data statement
+//   statements: [],
+//   changeStatements: (statements) => set((state) => ({ statements }))
+// }))
+
+//-----Ask Help-----
+
+type AskHelpType = {
+  ask: boolean, //user minta bantuan atau tidak
+  active: boolean, //bantuan aktif atau tidak
+  isCorrect: boolean
+}
+
+interface AskHelp {
+  askHelp: AskHelpType,
+  changeAskHelp: (askHelp: AskHelpType) => void
+}
+
+const useAskHelp = create<AskHelp>((set) => ({
+  askHelp: {
+    ask: false,
+    active: false,
+    isCorrect: false,
+  },
+  changeAskHelp: (askHelp) => set((state) => ({ askHelp }))
+}))
+
+
+
+
+
+
+
+export { useStartStore, useSettingsStore, useResults, useShowBombs, useAskHelp }

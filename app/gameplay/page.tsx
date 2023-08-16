@@ -5,6 +5,7 @@ import ModalResult from "@/components/modal-result"
 import Counter from "@/components/counter"
 import ShowBombs from "@/components/show-bombs"
 import RestartButton from "@/components/restart"
+import ModalQuestion from "@/components/modal-question"
 export default function Home() {
   return (
     <>
@@ -23,6 +24,7 @@ export default function Home() {
         <Counter />
 
       </main>
+      <ModalQuestion />
       <ModalResult />
     </>
   )

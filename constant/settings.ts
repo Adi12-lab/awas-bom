@@ -6,7 +6,8 @@ function generateSettings(difficult: string) {
                 block: 12,
                 bomb: 1,
                 minutes: 0,
-                seconds: 5
+                seconds: 20,
+                help: 4
             }
         case "medium":
             return {
@@ -14,7 +15,8 @@ function generateSettings(difficult: string) {
                 block: 12,
                 bomb: 3,
                 minutes: 3,
-                seconds: 0
+                seconds: 0,
+                help: 6,
             }
         case "hard":
             return {
@@ -22,7 +24,8 @@ function generateSettings(difficult: string) {
                 block: 12,
                 bomb: 5,
                 minutes: 2,
-                seconds: 30
+                seconds: 30,
+                help: 5,
             }
         default:
             return {
@@ -30,8 +33,15 @@ function generateSettings(difficult: string) {
                 block: 12,
                 bomb: 1,
                 minutes: 2,
-                seconds: 30
+                seconds: 30,
+                help: 4
             }
+    }
+}
+
+function helpSetting(num: number, blockLength: number) {
+    if(1 <= num && num <= blockLength) {
+        
     }
 }
 export { generateSettings }
